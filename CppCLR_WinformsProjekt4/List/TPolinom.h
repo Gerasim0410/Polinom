@@ -38,7 +38,7 @@ bool operator<= (const TMonom& m, const TMonom& n) {
 bool operator== (const TMonom& m, const TMonom& n) {
 	if (&m == NULL || &n == NULL)
 		return false;
-	if (m.px == n.px && m.py == n.py && m.pz == n.pz)
+	if (m.px == n.px && m.py == n.py && m.pz == n.pz && m.coeff==n.coeff)
 		return true;
 	else 
 		return false;
@@ -187,6 +187,7 @@ public:
 		return false;
 	}
 
+
 	void operator+=(TPolinom &q);
 	TPolinom operator+(TPolinom &q);
 	void operator-=(TPolinom &q);
@@ -309,7 +310,7 @@ void TPolinom::operator*=(TMonom &m) {
 
 TPolinom TPolinom::operator*(TPolinom &q) {
 	TPolinom res;
-	Reset();
+	q.Reset();
 	for (q.Reset(); !q.IsEnd(); q.GoNext()) {
 		TPolinom tmp = *this;
 		res += tmp * q.pCurr->val;
