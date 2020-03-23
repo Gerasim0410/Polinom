@@ -135,7 +135,6 @@ void TList<T>::DelFirst() {
 		TNode<T> *tmp = pFirst;
 		pFirst = pFirst->pNext;
 		delete tmp;
-		pos--;
 	}
 	size--;
 }
@@ -151,7 +150,7 @@ void TList<T>::DelCurrent() {
 		pPrev->pNext = pCurr;
 		size--;
 	}
-	if (size == 1) pLast = pFirst;
+	if (size == 1) pLast = pCurr = pFirst;
 	if (!size) pFirst = NULL;
 }
 
