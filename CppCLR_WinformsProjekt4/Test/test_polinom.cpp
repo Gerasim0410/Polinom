@@ -106,83 +106,64 @@ TEST(TPolinom, can_add_monom)
 }
 
 TEST(TPolinom, can_multiplicate_pol_and_mon) {
-	TMonom m, n, c;
-	m.coeff = 5;
-	m.px = 1;
-	m.py = 1;
-	m.pz = 0;
+	//(5xy+7xy^2z^3)*7xy^2z^3=49x^2y^4z^6+35x^2y^3z^3
+	TMonom n;
 	n.coeff = 7;
 	n.px = 1;
 	n.py = 2;
 	n.pz = 3;
-	c.coeff = 35;
-	c.px = 2;
-	c.py = 3;
-	c.pz = 3;
 	TPolinom p, res;
-	p.insOrd(m);
-	res.insOrd(c);
+	p.AddByPar(5, 1, 1, 0);
+	p.AddByPar(7, 1, 2, 3);
+	res.AddByPar(35, 2, 3, 3);
+	res.AddByPar(49, 2, 4, 6);
 	EXPECT_TRUE(res == p*n);
 }
 
 TEST(TPolinom, can_multiplicate_pol_and_pol) {
-	TMonom m, n, c, d, o;
-	m.coeff = 5;
-	m.px = 1;
-	m.py = 1;
-	m.pz = 0;
-	n.coeff = 7;
-	n.px = 1;
-	n.py = 2;
-	n.pz = 3;
-	c.coeff = -50;
-	c.px = 2;
-	c.py = 2;
-	c.pz = 0;
-	d.coeff = -105;
-	d.px = 2;
-	d.py = 3;
-	d.pz = 3;
-	o.coeff = -49;
-	o.px = 2;
-	o.py = 4;
-	o.pz = 6;
-	TPolinom p, l, res, res1;
-	p.insOrd(m);
-	p.insOrd(n);
-	l.insOrd(m*(-2));
-	l.insOrd(n*(-1));
-	res.insOrd(c);
-	res.insOrd(d);
-	res1=p*l;
-	//EXPECT_TRUE(res == res1);
+	//(5xy+7xy^2z^3)*(-10xy-7xy^2z^3+10x^2y^257xy^2z^3)=-50x^2y^2-70x^2y^3z^3+50x^6yz^2+70x^6y^2z^5
+	TPolinom p, l, res,res1;
+	p.AddByPar(5, 1, 1, 0);
+	p.AddByPar(7, 1, 2, 3);
+	l.AddByPar(-10,1,1,0);
+	l.AddByPar(-7,1,2,3);
+	l.AddByPar(10, 5, 0, 2);
+	l.AddByPar(7, 1, 2, 3);
+	res.AddByPar(-50,2,2,0);
+	res.AddByPar(-70, 2, 3, 3);
+	res.AddByPar(50, 6, 1, 2);
+	res.AddByPar(70, 6, 2, 5);
+	res1 = p * l;
+	EXPECT_TRUE(res == p*l);
 }
 
 TEST(TPolinom, can_add_pol_and_pol) {
-	TMonom m, n, c;
-	m.coeff = 5;
-	m.px = 1;
-	m.py = 1;
-	m.pz = 0;
-	n.coeff = 7;
-	n.px = 1;
-	n.py = 2;
-	n.pz = 3;
-	c.coeff = 0;
-	c.px = 1;
-	c.py = 1;
-	c.pz = 0;
+	//5xy+7xy^2z^3-5xy-7xy^2z^3=0
 	TPolinom p, l, res;
-	p.insOrd(m);
-	p.insOrd(n);
-	l.insOrd(m*(-1));
-	l.insOrd(n*(-1));
-	res.insOrd(c);
+	p.AddByPar(5, 1, 1, 0);
+	p.AddByPar(7, 1, 2, 3);
+	l.AddByPar(-5, 1, 1, 0);
+	l.AddByPar(-7, 1, 2, 3);
 	p += l;
 	EXPECT_TRUE(res == p);
 }
 
+TEST(TPolinom, can_add_pol_and_pol1) {
+	//5xy+7xy^2z^3+5xy-8xyz^4-7xy^2z^3=10xy-8xyz^4
+	TPolinom p, l, res;
+	p.AddByPar(5, 1, 1, 0);
+	p.AddByPar(7, 1, 2, 3);
+	l.AddByPar(5, 1, 1, 0);
+	l.AddByPar(-8, 1, 1, 4);
+	l.AddByPar(-7, 1, 2, 3);
+	p += l;
+	res.AddByPar(10, 1, 1, 0);
+	res.AddByPar(-8, 1, 1, 4);
+	EXPECT_TRUE(res == p);
+}
+
 TEST(TPolinom, can_multiplicate_pol_and_scal) {
+	//(5xy+5xy)*3=30xy
 	TMonom m, n;
 	m.coeff = 5;
 	m.px = 1;
@@ -197,7 +178,7 @@ TEST(TPolinom, can_multiplicate_pol_and_scal) {
 	p.insOrd(m);
 	p *= 3;
 	res.insOrd(n);
-	//EXPECT_TRUE(res == p);
+	EXPECT_TRUE(res == p);
 }
 
 
