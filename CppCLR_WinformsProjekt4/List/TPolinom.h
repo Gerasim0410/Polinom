@@ -7,7 +7,7 @@ struct TMonom {
 
 bool operator> (const TMonom& m, const TMonom& n) {
 	int f, s;
-	if (n.px < -100) return true;
+	if (n.px < 0) return true;
 	f = m.px * 100 + m.py * 10 + m.pz;
 	s = n.px * 100 + n.py * 10 + n.pz;
 	if (f > s)
@@ -18,7 +18,7 @@ bool operator> (const TMonom& m, const TMonom& n) {
 
 bool operator< (const TMonom& m, const TMonom& n) {
 	int f, s;
-	if (m.px < -100) return true;
+	if (m.px < 0) return true;
 	f = m.px * 100 + m.py * 10 + m.pz;
 	s = n.px * 100 + n.py * 10 + n.pz;
 	if (f < s)
@@ -38,7 +38,7 @@ bool operator<= (const TMonom& m, const TMonom& n) {
 bool operator== (const TMonom& m, const TMonom& n) {
 	if (&m == NULL || &n == NULL)
 		return false;
-	if (m.px == n.px && m.py == n.py && m.pz == n.pz && m.coeff==n.coeff)
+	if (m.px == n.px && m.py == n.py && m.pz == n.pz)
 		return true;
 	else 
 		return false;
@@ -169,11 +169,13 @@ public:
 
 	bool operator==(TPolinom &q) {
 		if (size == q.size) {
-			for (Reset(); !IsEnd(); GoNext()) {
-				for (q.Reset(); !q.IsEnd(); q.GoNext()) {
-					if (pCurr->val != q.pCurr->val)return false;
+			Reset();
+			q.Reset();
+			for (int i = 0; i < size;i++) {
+					if (pCurr->val != q.pCurr->val && pCurr->val.coeff == q.pCurr->val.coeff)return false;
+					GoNext();
+					q.GoNext();
 				}
-			}
 			return true;
 		}
 		else return false;
@@ -205,6 +207,14 @@ public:
 
 	void insOrd(const TMonom &m);
 	//string GetString();
+	void AddByPar(int a, int b, int c, int d) {
+		TMonom g;
+		g.coeff = a;
+		g.px = b;
+		g.py = c;
+		g.pz = d;
+		insOrd(g);
+	}
 
 	friend ostream& operator<<(ostream &out, TPolinom &p) {
 		if (p.size) {
@@ -300,7 +310,7 @@ void TPolinom::operator-=(TPolinom &q) {
 }
 
 TPolinom TPolinom::operator-(TPolinom &q) {
-	return *this + (q * (-1));
+	return (*this + (q * (-1)));
 }
 
 void TPolinom::operator*=(TMonom &m) {
